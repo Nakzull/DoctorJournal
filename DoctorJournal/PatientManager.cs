@@ -32,5 +32,13 @@ namespace DoctorJournal
         {
             return dataStorage.GetTotalJournalEntries(patientIndex);
         }
+        public void CheckFolder()
+        {
+            dataStorage.CheckFolder();
+        }
+        public void PatientNumber()
+        {
+            dataStorage.PatientNumber();
+        }
     }
 }

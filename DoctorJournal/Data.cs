@@ -10,10 +10,18 @@ namespace DoctorJournal
     public class DataStorage
     {
         // Get the patient number from the file in the directory and initialise lists of patients and journal entries.
-        int patientNumber = Convert.ToInt32(File.ReadAllText(@"C:\\journalopgave\patientNumber.txt"));
+        int patientNumber = 0;
 
-        List<JournalEntry> journalEntry = new List<JournalEntry>();
-
+        public void PatientNumber()
+        {
+            if (File.Exists(@"C:\\journalopgave\patientNumber.txt"))
+                patientNumber = Convert.ToInt32(File.ReadAllText(@"C:\\journalopgave\patientNumber.txt"));
+        }
+        public void CheckFolder()
+        {
+            if (!Directory.Exists(@"c:\journalopgave"))
+                Directory.CreateDirectory(@"c:\journalopgave");
+        }
         // Method for creating a new patient and write it to a local file.
         public void CreatePatient(string name, string adress, int phoneNumber, string email, string cprNumber, string preferredDoctor, DateTime dateOfBirth)
         {
@@ -24,7 +32,6 @@ namespace DoctorJournal
                 ageYear = DateTime.Now.Year - dateOfBirth.Year;
             DateTime now = DateTime.Now;
             int ageDay = (int)((now - dateOfBirth).TotalDays % 365.25);
-            Patient patient1 = new Patient(name, adress, phoneNumber, email, cprNumber, preferredDoctor, ageYear, ageDay, journalEntry);
             string fileName = @"c:\\journalopgave\patient" + patientNumber +".txt";
 
             // Create a new file     
@@ -39,13 +46,14 @@ namespace DoctorJournal
                     $"Age: {ageYear}");
                 sw.Close();
             }
-            patientNumber++;
+            // Update the patient number in the local file.
             using (StreamWriter sw = File.CreateText(@"C:\\journalopgave\patientNumber.txt"))
             {
+                patientNumber++;
                 sw.WriteLine(patientNumber);
                 sw.Close();
             }
-            // Update the patient number in the local file.
+            // Add the name of the patient to the local file.
             using (StreamWriter sw = File.AppendText(@"C:\\journalopgave\patientNames.txt"))
             {
                 sw.WriteLine(name);
@@ -105,15 +113,26 @@ namespace DoctorJournal
         public List<string> GetPatientsInSystem()
         {
             List<string> listOfPatientsInSystem = new List<string>();
-            StreamReader sr = new StreamReader(@"C:\\journalopgave\patientNames.txt");
-            string line;
-            line = sr.ReadLine();
-            while (line != null)
+            if (File.Exists(@"C:\\journalopgave\patientNames.txt"))
             {
-                listOfPatientsInSystem.Add(line);
+                StreamReader sr = new StreamReader(@"C:\\journalopgave\patientNames.txt");
+                string line;
                 line = sr.ReadLine();
+                while (line != null)
+                {
+                    listOfPatientsInSystem.Add(line);
+                    line = sr.ReadLine();
+                }
+                sr.Close();
+                return listOfPatientsInSystem;
             }
-            sr.Close();
+            else
+            {
+                using (StreamWriter sw = File.CreateText(@"C:\\journalopgave\patientNames.txt"))
+                {
+                    sw.Close();
+                }
+            }
             return listOfPatientsInSystem;
         }
     }

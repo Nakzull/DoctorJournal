@@ -8,7 +8,9 @@ namespace DoctorJournal
     {
         static void Main(string[] args)
         {
-            PatientManager patientManager = new PatientManager();
+            PatientManager patientManager = new PatientManager();            
+            patientManager.CheckFolder();
+            patientManager.PatientNumber();
             patientManager.GetPatientsInSystem();
             for (; ; )
             {
