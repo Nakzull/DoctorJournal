@@ -35,10 +35,6 @@ namespace DoctorJournal
             AgeDay = ageDay;
             JournalEntry = journalEntry;
         }
-        public List<JournalEntry> GetJournalEntry()
-        {
-            return JournalEntry;            
-        }
     }
 }
 

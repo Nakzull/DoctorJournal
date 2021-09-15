@@ -9,14 +9,17 @@ namespace DoctorJournal
 {
     public class DataStorage
     {
-        // Get the patient number from the file in the directory and initialise lists of patients and journal entries.
+        
         int patientNumber = 0;
 
+        // Check if a local file exists with the correct patient number and if so update it from 0.
         public void PatientNumber()
         {
             if (File.Exists(@"C:\\journalopgave\patientNumber.txt"))
                 patientNumber = Convert.ToInt32(File.ReadAllText(@"C:\\journalopgave\patientNumber.txt"));
         }
+
+        // Check if a local folder exists for all the files used in the program.
         public void CheckFolder()
         {
             if (!Directory.Exists(@"c:\journalopgave"))
